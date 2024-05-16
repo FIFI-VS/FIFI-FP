@@ -10,7 +10,7 @@ def sarm_lister(target_abv):
     return sarm_list
     
 def dictionary_target(target_abv):
-    target_dict = {"lag": "Lysosomal_alpha-glucosidase", 
+    target_dict = {"kor": "Kappa_opioid_receptor", 
                    "mapk": "MAP_kinase_ERK2", 
                    "adrb2": "Beta-2_adrenergic_receptor", 
                    'casp1': 'Caspase-1', "kor": "Kappa_opioid_receptor"
