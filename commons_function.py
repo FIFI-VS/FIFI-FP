@@ -2,15 +2,6 @@ from rdkit import Chem
 
 import matplotlib as plt
 
-
-def datadirpath(ws_status=False):
-    if ws_status:  #ws
-        DATADIRPATH = '/home/rezi/test/data'
-
-    else:
-        DATADIRPATH = 'D:'
-    return DATADIRPATH
-
 def sarm_lister(target_abv):
     target = target_dict[target_abv]
     target_folder = f'{DATADIRPATH}/SARM/{target}'
