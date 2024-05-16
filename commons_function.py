@@ -11,7 +11,13 @@ def datadirpath(ws_status=False):
         DATADIRPATH = 'D:'
     return DATADIRPATH
 
-
+def SarmLister(target_abv):
+    target = target_dict[target_abv]
+    target_folder = f'{DATADIRPATH}/SARM/{target}'
+    sarm_list = [f for f in os.listdir(target_folder) if os.path.isfile(os.path.join(target_folder, f))]
+    
+    return sarm_list
+    
 def dictionary_target(target_abv):
     target_dict = {"lag": "Lysosomal_alpha-glucosidase", 
                    "mapk": "MAP_kinase_ERK2", 
