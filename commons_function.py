@@ -2,9 +2,8 @@ from rdkit import Chem
 
 import matplotlib as plt
 
-def sarm_lister(target_abv):
+def sarm_lister(target_folder, target_abv):
     target = dictionary_target[target_abv]
-    target_folder = f'SARM/{target}'
     sarm_list = [f for f in os.listdir(target_folder) if os.path.isfile(os.path.join(target_folder, f))]
     
     return sarm_list
@@ -13,7 +12,7 @@ def dictionary_target(target_abv):
     target_dict = {"kor": "Kappa_opioid_receptor", 
                    "mapk": "MAP_kinase_ERK2", 
                    "adrb2": "Beta-2_adrenergic_receptor", 
-                   'casp1': 'Caspase-1', "kor": "Kappa_opioid_receptor"
+                   'casp1': 'Caspase-1'
                   }
     
     target = target_dict[target_abv]
