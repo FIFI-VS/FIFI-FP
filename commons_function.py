@@ -4,7 +4,7 @@ import matplotlib as plt
 
 def sarm_lister(target_abv):
     target = dictionary_target[target_abv]
-    target_folder = f'{DATADIRPATH}/SARM/{target}'
+    target_folder = f'SARM/{target}'
     sarm_list = [f for f in os.listdir(target_folder) if os.path.isfile(os.path.join(target_folder, f))]
     
     return sarm_list
