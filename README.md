@@ -1,9 +1,9 @@
-# FIFI
+# FIFI (Fragmented Interaction FIngerprint)
 
 FIFI is a molecular fingerprint, containing hybrid information from ligand- and structure-based drug design.
 
 **Requirements**
-- Python 3 (Initially developed in Python 3.8)
+- Python 3 (FIFI was initially developed in Python 3.8)
 - NumPy
 - Pandas
 - RDKit
