@@ -3,10 +3,10 @@
 FIFI is a molecular fingerprint, containing hybrid information from ligand- and structure-based drug design.
 
 **Requirements**
-Python 3
-NumPy
-Pandas
-RDKit
+- Python 3 (Initially developed in Python 3.8)
+- NumPy
+- Pandas
+- RDKit
 
 **How to use**
 - Prepare the files containing sdf of docked ligands, and pdb of the receptor
