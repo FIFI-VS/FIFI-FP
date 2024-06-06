@@ -13,20 +13,26 @@ def filename2aaname(filename):
     return aa_name
 
 
-def array2df(numpy_array, list_ligand_names, aa_name):
+def array2df(numpy_array, 
+             list_ligand_names, 
+             aa_name):
     bit_list = [f'{aa_name}_{number}' for number in range(len(numpy_array))]
 
     return pd.DataFrame(numpy_array.T, columns=bit_list, index=list_ligand_names).astype(int)
 
 
-def zero_aadf(num_bits, list_ligand_names, aa_name):
+def zero_aadf(num_bits, 
+              list_ligand_names, 
+              aa_name):
     bit_list = [f'{aa_name}_{number}' for number in range(num_bits)]
     data = [[0] * num_bits] * len(list_ligand_names)
 
     return pd.DataFrame(data, columns=bit_list, index=list_ligand_names)
 
 
-def list_dict2array_dict(dict_one_based, num_rows, compound_names):
+def list_dict2array_dict(dict_one_based, 
+                         num_rows, 
+                         compound_names):
     result_dict = {}
 
     for compound_name in compound_names:
@@ -43,7 +49,9 @@ def list_dict2array_dict(dict_one_based, num_rows, compound_names):
     return data_array
 
 
-def partial_fifi_unique_pickle2df(pickle_folder_path, aa_name, list_included_ligands):
+def partial_fifi_unique_pickle2df(pickle_folder_path, 
+                                  aa_name, 
+                                  list_included_ligands):
     with open(f"{pickle_folder_path}/{aa_name}.pickle", "rb") as handle:
         row_order_dict = pickle.load(handle)
 
@@ -66,6 +74,9 @@ def fifiba_pickle2df(fifi_ba_folder_path,
                      aa_list,
                      index_list,
                      ecfp_bits_number=1024):
+    #fifi_ba_folder_path: path to a folder where the pickle of FIFI-BA was saved
+    #included_ligands: list of compound names to be loaded from the pickle
+
     cpd_hash_list = pd.read_pickle(fifi_ba_folder_path)
 
     new_column_names = []
@@ -91,6 +102,8 @@ def fifiba_pickle2df(fifi_ba_folder_path,
 
 def fifius_pickle2df(fifius_folder_path,
                      included_ligands):
+    #fifius_folder_path: path to a folder where all residue pickles of FIFI-US were saved
+    #included_ligands: list of compound names to be loaded from the pickle
     pickle_files = [f for f in os.listdir(fifius_folder_path) if f.endswith(".pickle")]
     pickle_files = sorted(pickle_files, key=extract_number)
     fifi_whole_df = pd.DataFrame()
