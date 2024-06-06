@@ -156,13 +156,17 @@ def saving_whole_dict(whole_unique_dict,
 
 def generating_fifi_fp(ligand_mols,
                        df_boolean_frag,
-                       lig_depth,
                        residue_dict,
+                       lig_depth = 2,
                        ecfp_dist=2,
                        threshold_or_list=5.5,
                        smarts_save_dir="{DATADIRPATH}/fifi/smarts_bits_v8/{target_abv}/",
                        number_ecfp_bits=1024
                        ):
+    #lig_mols is ligand sdf loaded by rdkit
+    #df_boolean_frag is dataframe made using fifi_vicinity module
+    #residue dict is a dictionary made by residue_dict_maker function
+                           
     dict_smarts, dict_hash = generating_hash_dictionary(ligand_mols, ecfp_dist)
 
     list_ligands_name = df_boolean_frag["name"].unique()
@@ -266,12 +270,16 @@ def generating_fifi_fp(ligand_mols,
 
 def generating_fifius_only(ligand_mols,
                            df_boolean_frag,
-                           threshold_or_list,
-                           lig_depth,
                            res_dict,
-                           ecfp_dist,
+                           threshold_or_list = 5.5,
+                           lig_depth = 2,
+                           ecfp_dist = 2,
                            smarts_save_dir="{DATADIRPATH}/fifi/smarts_bits_v8/{target_abv}/",
                            ):
+    #lig_mols is ligand sdf loaded by rdkit
+    #df_boolean_frag is dataframe made using fifi_vicinity module
+    #residue dict is a dictionary made by residue_dict_maker function
+
     dict_smarts, dict_hash = generating_hash_dictionary(ligand_mols, ecfp_dist)
 
     list_ligands_name = df_boolean_frag["name"].unique()
@@ -366,13 +374,17 @@ def generating_fifius_only(ligand_mols,
 
 def generating_fifiba_only(lig_mols,
                            df_boolean_frag,
-                           threshold_or_list,
-                           lig_depth,
                            residue_dict,
-                           ecfp_dist,
+                           threshold_or_list =5.5,
+                           lig_depth = 2,
+                           ecfp_dist = 2,
                            smarts_save_dir="{DATADIRPATH}/fifi/smarts_bits_v8/{target_abv}/",
                            number_ecfp_bits=1024
                            ):
+    #lig_mols is ligand sdf loaded by rdkit
+    #df_boolean_frag is dataframe made using fifi_vicinity module
+    #residue dict is a dictionary made by residue_dict_maker function
+                            
     _, dict_hash = generating_hash_dictionary(lig_mols, ecfp_dist)
 
     list_ligands_name = df_boolean_frag["name"].unique()
