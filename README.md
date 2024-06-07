@@ -15,4 +15,5 @@ FIFI is a molecular fingerprint, containing hybrid information from ligand- and 
 - Use fifi pickle load module to get a dataframe version from the generated FIFI FP, and further can be used as a machine learning input
 
 **Example to use**
+
 please refer to the jupyter notebook [FIFI example](https://github.com/FIFI-VS/FIFI-FP/blob/main/FIFI_example.ipynb)
