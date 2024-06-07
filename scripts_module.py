@@ -30,12 +30,12 @@ def organize_morgan_hash_on_atoms(mol: Chem.Mol, bitinf: dict, organize_radius: 
     return ret_dict
 
 
-def get_morgan_features(orgmol,
-                        radi=2,
-                        return_as_string=False,
-                        input_smiles=True,
-                        return_atom_hash=False,
-                        inc_redundant_environment=False,
+def get_morgan_features(orgmol, 
+                        radius=2, 
+                        return_as_string=False, 
+                        input_smiles=False, 
+                        return_atom_hash=False, 
+                        include_redundant_environment=False,
                         return_bitinf=False,
                         organize_radius=False):
     """
@@ -58,28 +58,27 @@ def get_morgan_features(orgmol,
         return None
 
     binf = dict()
-    features = AllChem.GetMorganFingerprint(mol, radius=radi, bitInfo=binf,
-                                            includeRedundantEnvironments=inc_redundant_environment)
-    finf = features.GetNonzeroElements()
-
+    features = AllChem.GetMorganFingerprint(mol, radius=radius, bitInfo=binf, includeRedundantEnvironments=include_redundant_environment)
+    finf     = features.GetNonzeroElements()
+    
     # check the unnecessary hash or not
     newbinf = dict()
-    if inc_redundant_environment:  # True only chance of generating unmatched hashes
+    if include_redundant_environment: # True only chance of generating unmatched hashes
         for hkey, envs in binf.items():
             rinf = list()
             for env in envs:
                 atom_idx = env[0]
-                radi = env[1]
-                env = AllChem.FindAtomEnvironmentOfRadiusN(mol, radi, atom_idx)
+                radi     = env[1]
+                env      = AllChem.FindAtomEnvironmentOfRadiusN(mol, radi, atom_idx)
                 # the hash does not corresponds to environment
                 if (radi != 0) and (len(env) == 0):
-                    print('unnecessary hashes are detected. remove the hash from the mol', hkey, 'from',
-                          Chem.MolToSmiles(mol))
+                    print('unnecessary hashes are detected. remove the hash from the mol', hkey, 'from', Chem.MolToSmiles(mol))
+                    trancated =True
                     continue
                 rinf.append((atom_idx, radi))
             newbinf[hkey] = tuple(rinf)
         binf = newbinf
-
+    
     # return options
     if return_atom_hash:
         atomidx_hash = organize_morgan_hash_on_atoms(mol, binf, organize_radius)
@@ -94,31 +93,30 @@ def get_morgan_features(orgmol,
         return finf
 
 
-def make_ecfp_substruct_from_hash(mols,
+def make_ecfp_substruct_from_hash(mols, 
                                   hkeys,
-                                  return_recursive_smarts=False,
-                                  check_exhaustives=False,
-                                  return_rad_dict=False):
+                                  radi, 
+                                  include_redundant_environment = True,
+                                  return_recursive_smarts=False, 
+                                  check_exhastives=False,
+                                  return_radius_dict=False):
     """
     transforming the hash keys into smiles format
-    :param return_rad_dict:
-    :param check_exhaustives:
-    :param return_recursive_smarts:
     :param mols:
     :param hkeys:
-
+    :param radi: radius for the morgan fingerprint
+    include_redundant_environment: must be important
     v3: must be most accurate based on the rdkit definition.
     :return:
     """
     nhash = len(hkeys)
     hash_found = dict.fromkeys(hkeys, 0)  # flag (the hash key is found)
-    substructs = dict.fromkeys(hkeys)  # found substructures corresponding to the hash
-    radiuss = dict.fromkeys(hkeys)  # found substructures corresponding to the hash
+    substructs = dict.fromkeys(hkeys) # found substructures corresponding to the hash
+    radiuss    = dict.fromkeys(hkeys) # found substructures corresponding to the hash
 
     for mol in mols:
-        sub_infos = {}
-        """fp = AllChem.GetMorganFingerprint(mol, radi, bitInfo=sub_infos,
-                                          includeRedundantEnvironments=inc_redundant_environment)"""
+        sub_infos={}
+        fp = AllChem.GetMorganFingerprint(mol, radi, bitInfo=sub_infos, includeRedundantEnvironments=include_redundant_environment)
 
         for hkey, struct_inf in sub_infos.items():
             if hkey not in hash_found.keys():
@@ -129,24 +127,26 @@ def make_ecfp_substruct_from_hash(mols,
 
             hash_found[hkey] = True
             # substructure extraction options
-            smarts = make_canon_smarts_from_sub_v3(mol, struct_inf, return_recursive_smarts, include_ring=True)
+            smarts           = make_canon_smarts_from_sub_v3(mol, struct_inf, return_recursive_smarts, include_ring=True) 
             substructs[hkey] = smarts
-            radiuss[hkey] = struct_inf[0][1]  # extract representative
+            radiuss[hkey]    = struct_inf[0][1] # extract representative
 
-            #the query find all the atoms registeredd
-            if check_exhaustives:
+            
+            # the query find all the atoms registed
+            if check_exhastives: 
+                # debugging
                 if smarts == "":  # the hash must be eliminated
                     print('hash', hkey, 'does not match any substructure')
                     continue
-
-                query = substructs[hkey]
+                
+                query    = substructs[hkey]
                 sub_sets = mol.GetSubstructMatches(AllChem.MolFromSmarts(query))
                 atomsets = [v[0] for v in struct_inf]
                 passtest = True
-                #Checking substructure Size
+                # check the found substructure sizes
                 if len(sub_sets) != len(atomsets):
                     passtest = False
-
+                
                 # check whether the registered atoms are found in substs
                 found_sub = np.zeros(len(sub_sets), dtype=bool)
                 for atom in atomsets:
@@ -154,14 +154,14 @@ def make_ecfp_substruct_from_hash(mols,
                     found_sub[found_mask] = 1
                 if np.sum(found_sub) != len(sub_sets):
                     passtest = False
-
+                
                 if not passtest:
-                    print('inconsistency finding, check the query:', query, 'mol', AllChem.MolToSmiles(mol),
-                          'registerd_atomsets', atomsets)
-                    make_canon_smarts_from_sub_v3(mol, struct_inf, return_recursive_smarts, include_ring=True)
-
+                    # for debugging
+                    print('inconsistency finding, check the query:', query, 'mol', AllChem.MolToSmiles(mol), 'registerd_atomsets', atomsets)
+                    make_canon_smarts_from_sub_v3(mol, struct_inf, return_recursive_smarts, include_ring=True) 
+                
         if sum(hash_found.values()) == nhash:
-            if return_rad_dict:
+            if return_radius_dict:
                 return substructs, radiuss
             else:
                 return substructs
