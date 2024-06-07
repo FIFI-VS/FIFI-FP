@@ -134,7 +134,6 @@ def make_ecfp_substruct_from_hash(mols,
             
             # the query find all the atoms registed
             if check_exhastives: 
-                # debugging
                 if smarts == "":  # the hash must be eliminated
                     print('hash', hkey, 'does not match any substructure')
                     continue
@@ -156,7 +155,6 @@ def make_ecfp_substruct_from_hash(mols,
                     passtest = False
                 
                 if not passtest:
-                    # for debugging
                     print('inconsistency finding, check the query:', query, 'mol', AllChem.MolToSmiles(mol), 'registerd_atomsets', atomsets)
                     make_canon_smarts_from_sub_v3(mol, struct_inf, return_recursive_smarts, include_ring=True) 
                 
