@@ -13,3 +13,6 @@ FIFI is a molecular fingerprint, containing hybrid information from ligand- and 
 - Use fifi vicinity module to extract vicinity atoms
 - Use fifi generating fp module to translate the atoms into fingerprints, saved as pickle
 - Use fifi pickle load module to get a dataframe version from the generated FIFI FP, and further can be used as a machine learning input
+
+**Example to use**
+please refer to the jupyter notebook https://github.com/FIFI-VS/FIFI-FP/FIFI_example.ipynb
