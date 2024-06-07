@@ -235,7 +235,7 @@ def generating_fifi_fp(ligand_mols,
 
             for idx, mol in enumerate(ligand_mols):
                 print(
-                    f'processing {residue_name_order} {aa_order + 1}/{len(aa_list)} aa {idx}/{lig_num} ligands',
+                    f'processing {residue_name_order} {aa_order + 1}/{len(aa_list)} aa {idx + 1}/{lig_num} ligands',
                     end='\r')
                 ligand_name = mol.GetProp('_Name')
 
@@ -350,7 +350,7 @@ def generating_fifius_only(ligand_mols,
 
             for idx, mol in enumerate(ligand_mols):
                 print(
-                    f'processing {residue_name_order} {aa_order + 1}/{len(aa_list)} aa {idx}/{lig_num} ligands',
+                    f'processing {residue_name_order} {aa_order + 1}/{len(aa_list)} aa {idx + 1}/{lig_num} ligands',
                     end='\r')
                 ligand_name = mol.GetProp('_Name')
 
@@ -456,7 +456,7 @@ def generating_fifiba_only(lig_mols,
 
             for idx, mol in enumerate(lig_mols):
                 print(
-                    f'processing {residue_name_order} {aa_order + 1}/{len(aa_list)} aa {idx}/{lig_num} ligands',
+                    f'processing {residue_name_order} {aa_order + 1}/{len(aa_list)} aa {idx + 1}/{lig_num} ligands',
                     end='\r')
                 ligand_name = mol.GetProp('_Name')
 
