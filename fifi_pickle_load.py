@@ -117,3 +117,11 @@ def fifius_pickle2df(fifius_folder_path,
             fifi_whole_df = pd.concat([fifi_whole_df, fifi_aa_df], axis=1)
 
     return fifi_whole_df
+
+def get_cpd_names_sdf(sdf_file):
+    compound_names = []
+    for mol in sdf_file:
+        name = mol.GetProp("_Name") if mol.HasProp("_Name") else None
+        compound_names.append(name)
+
+    return compound_names
