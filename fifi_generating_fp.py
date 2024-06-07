@@ -22,6 +22,36 @@ def residue_dict_maker(pdb_file):
     return amino_acids_dict
 
 
+def generating_hash_dictionary_v2(ligands_mol, ecfp_dist):
+    radii = int(ecfp_dist / 2)
+    dict_smarts = {}
+    dict_hash = {}
+
+    for mol in ligands_mol:
+        dict_key = mol.GetProp("_Name")
+
+        atomwise_hash = get_morgan_features(mol,
+                                            radius=radii,
+                                            return_as_string=False,
+                                            input_smiles=False,
+                                            return_atom_hash=True,
+                                            include_redundant_environment=True)
+
+        hashkeys = list(atomwise_hash.values())
+        hashkeys = [v for arr in hashkeys for v in arr]
+        uhashkeys = np.unique(hashkeys)
+
+        smarts = make_ecfp_substruct_from_hash([mol],
+                                               uhashkeys,
+                                               radi = radii,
+                                               return_recursive_smarts=True)
+
+        dict_smarts.update(smarts)
+        dict_hash[dict_key] = atomwise_hash
+
+    return dict_smarts, dict_hash
+
+
 def generating_hash_dictionary(ligands_mol, ecfp_dist):
     radii = int(ecfp_dist / 2)
     dict_smarts = {}
@@ -160,14 +190,16 @@ def generating_fifi_fp(ligand_mols,
                        lig_depth = 2,
                        ecfp_dist=2,
                        threshold_or_list=5.5,
-                       smarts_save_dir="{DATADIRPATH}/fifi/smarts_bits_v8/{target_abv}/",
+                       smarts_save_dir=[],
                        number_ecfp_bits=1024
                        ):
     #lig_mols is ligand sdf loaded by rdkit
     #df_boolean_frag is dataframe made using fifi_vicinity module
     #residue dict is a dictionary made by residue_dict_maker function
+    if not smarts_save_dir:
+        smarts_save_dir="smarts_bits_v8"
                            
-    dict_smarts, dict_hash = generating_hash_dictionary(ligand_mols, ecfp_dist)
+    dict_smarts, dict_hash = generating_hash_dictionary_v2(ligand_mols, ecfp_dist)                           
 
     list_ligands_name = df_boolean_frag["name"].unique()
     lig_num = len(list_ligands_name)
@@ -274,12 +306,15 @@ def generating_fifius_only(ligand_mols,
                            threshold_or_list = 5.5,
                            lig_depth = 2,
                            ecfp_dist = 2,
-                           smarts_save_dir="{DATADIRPATH}/fifi/smarts_bits_v8/{target_abv}/",
+                           smarts_save_dir=[],
                            ):
     #lig_mols is ligand sdf loaded by rdkit
     #df_boolean_frag is dataframe made using fifi_vicinity module
     #residue dict is a dictionary made by residue_dict_maker function
-
+                               
+    if not smarts_save_dir:
+        smarts_save_dir="smarts_bits_v8"
+        
     dict_smarts, dict_hash = generating_hash_dictionary(ligand_mols, ecfp_dist)
 
     list_ligands_name = df_boolean_frag["name"].unique()
@@ -378,13 +413,15 @@ def generating_fifiba_only(lig_mols,
                            threshold_or_list =5.5,
                            lig_depth = 2,
                            ecfp_dist = 2,
-                           smarts_save_dir="{DATADIRPATH}/fifi/smarts_bits_v8/{target_abv}/",
+                           smarts_save_dir=[],
                            number_ecfp_bits=1024
                            ):
     #lig_mols is ligand sdf loaded by rdkit
     #df_boolean_frag is dataframe made using fifi_vicinity module
     #residue dict is a dictionary made by residue_dict_maker function
-                            
+                               
+    if not smarts_save_dir:
+        smarts_save_dir="smarts_bits_v8"                            
     _, dict_hash = generating_hash_dictionary(lig_mols, ecfp_dist)
 
     list_ligands_name = df_boolean_frag["name"].unique()
