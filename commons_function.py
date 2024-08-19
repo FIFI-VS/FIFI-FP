@@ -10,7 +10,9 @@ def dictionary_target(target_abv):
     target_dict = {"kor": "Kappa_opioid_receptor", 
                    "mapk": "MAP_kinase_ERK2", 
                    "adrb2": "Beta-2_adrenergic_receptor", 
-                   'casp1': 'Caspase-1'
+                   "casp1": "Caspase-1",
+                   "lag": "Lysosomal_alpha-glucosidase",
+                   "p53": "Cellular_tumor_antigen_p53"
                   }
     
     target = target_dict[target_abv]
@@ -22,8 +24,8 @@ def dictionary_model(model_abv):
     model_dict = {'Random Forest': 'rf', 
                   'Linear Kernel SVM': 'lksvm', 
                   'Radial Based Function SVM': 'rbfsvm',
-                  "Logistic Regression": 'logreg', 
-                  "Tanimoto Kernel SVM": 'tksvm'}
+                  'Logistic Regression': 'logreg', 
+                  'Tanimoto Kernel SVM': 'tksvm'}
     model_abv_dict = {v: k for k, v in model_dict.items()}
 
     model = model_abv_dict[model_abv]
