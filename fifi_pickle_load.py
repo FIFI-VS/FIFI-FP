@@ -52,6 +52,8 @@ def list_dict2array_dict(dict_one_based,
 def partial_fifi_unique_pickle2df(pickle_folder_path, 
                                   aa_name, 
                                   list_included_ligands):
+    #included_ligands: list of compound names to be loaded from the pickle
+                                      
     with open(f"{pickle_folder_path}/{aa_name}.pickle", "rb") as handle:
         row_order_dict = pickle.load(handle)
 
@@ -75,7 +77,6 @@ def fifiba_pickle2df(fifi_ba_folder_path,
                      index_list,
                      ecfp_bits_number=1024):
     #fifi_ba_folder_path: path to a folder where the pickle of FIFI-BA was saved
-    #included_ligands: list of compound names to be loaded from the pickle
 
     cpd_hash_list = pd.read_pickle(fifi_ba_folder_path)
 
